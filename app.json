@@ -1,0 +1,10 @@
+{
+  "android": {
+    "package": "com.anonymous.billingzone2"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "d0652769-96fe-44a5-a0b2-34e99bd601cd"
+    }
+  }
+}
