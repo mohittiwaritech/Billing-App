@@ -1,10 +1,19 @@
 {
-  "android": {
-    "package": "com.anonymous.billingzone2"
-  },
-  "extra": {
-    "eas": {
-      "projectId": "d0652769-96fe-44a5-a0b2-34e99bd601cd"
+  "expo": {
+    "name": "billingzone",
+    "slug": "billingzone",
+    "version": "1.0.0",
+    "scheme": "billingzone",
+    "android": {
+      "package": "com.anonymous.billingzone2",
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
     }
   }
 }

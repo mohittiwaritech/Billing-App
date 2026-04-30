@@ -1,11 +1,27 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Login(){
 
 const router = useRouter();
 const [phone,setPhone] = useState("");
+
+
+// Bluetooth Permission Function
+async function requestBluetoothPermission() {
+  await PermissionsAndroid.requestMultiple([
+    PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+    PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  ]);
+}
+
+// Screen open hote hi permission
+useEffect(() => {
+  requestBluetoothPermission();
+}, []);
+
 
 const sendOTP = () => {
 
@@ -64,7 +80,7 @@ logo:{
 fontSize:32,
 fontWeight:"bold",
 textAlign:"center",
-color:"#rgb(255 77 28)",
+color:"#ff4d1c",
 marginBottom:20
 },
 
@@ -96,7 +112,7 @@ padding:15
 },
 
 button:{
-backgroundColor:"#rgb(255 77 28)",
+backgroundColor:"#ff4d1c",
 padding:15,
 borderRadius:10
 },
