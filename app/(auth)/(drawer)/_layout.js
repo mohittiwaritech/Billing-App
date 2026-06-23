@@ -1,215 +1,266 @@
 import { Ionicons } from "@expo/vector-icons";
-import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    DrawerItemList,
+} from "@react-navigation/drawer";
 import { router } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+// 1. Pehle ensure karein ki ye import sahi se ho
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import useStore from "../../../components/store/useStore";
 
 function CustomDrawer(props) {
+  const { businessProfile } = useStore();
 
-const { businessProfile } = useStore();
+  const logout = () => {
+    router.replace("/login");
+  };
 
-const logout = () => {
-router.replace("/login");
-};
+  return (
+    <View style={{ flex: 1, justifyContent: "space-between" }}>
+      <DrawerContentScrollView {...props}>
+        <View style={styles.logoBox}>
+          <Ionicons
+            name="storefront"
+            size={30}
+            color="#ff4d1c"
+          />
 
-return (
+          <Text style={styles.logoText}>
+            {businessProfile?.businessName || "Billing Zone POS"}
+          </Text>
+        </View>
 
-<View style={{ flex: 1, justifyContent: "space-between" }}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
 
-<DrawerContentScrollView {...props}>
+      <TouchableOpacity
+        style={styles.logout}
+        onPress={logout}
+      >
+        <Ionicons
+          name="log-out-outline"
+          size={22}
+          color="#fff"
+        />
 
-<View style={styles.logoBox}>
-
-<Ionicons name="storefront" size={30} color="#ff4d1c" />
-
-<Text style={styles.logoText}>
-{businessProfile?.businessName || "Billing Zone POS"}
-</Text>
-
-</View>
-
-<DrawerItemList {...props} />
-
-</DrawerContentScrollView>
-
-<TouchableOpacity style={styles.logout} onPress={logout}>
-
-<Ionicons name="log-out-outline" size={22} color="#fff" />
-
-<Text style={styles.logoutText}>Logout</Text>
-
-</TouchableOpacity>
-
-</View>
-
-);
+        <Text style={styles.logoutText}>
+          Logout
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 export default function Layout() {
+  return (
+    // 2. Pure Drawer Layout ko yahan GestureHandlerRootView se wrap karein
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer
+        backBehavior="none"
+        drawerContent={(props) => (
+          <CustomDrawer {...props} />
+        )}
+        screenOptions={({ navigation }) => ({
+          headerStyle: {
+            backgroundColor: "#ff4d1c",
+          },
 
-return (
+          headerTintColor: "#fff",
 
-<Drawer
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.openDrawer()}
+              style={{ marginLeft: 15 }}
+            >
+              <Ionicons
+                name="menu"
+                size={28}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          ),
 
-backBehavior="none"
+          drawerActiveBackgroundColor: "#ff4d1c",
 
-drawerContent={(props) => <CustomDrawer {...props} />}
+          drawerActiveTintColor: "#fff",
 
-screenOptions={({ navigation }) => ({
+          drawerLabelStyle: {
+            fontSize: 16,
+          },
 
-headerStyle: { backgroundColor: "#ff4d1c" },
-headerTintColor: "#fff",
+          drawerStyle: {
+            width: 280,
+          },
 
-headerLeft: () => (
-<TouchableOpacity
-onPress={() => navigation.openDrawer()}
-style={{ marginLeft: 15 }}
->
-<Ionicons name="menu" size={28} color="#fff" />
-</TouchableOpacity>
-),
+          drawerType: "front",
+          swipeEnabled: true,
+          overlayColor: "rgba(0,0,0,0.3)",
+        })}
+      >
+        <Drawer.Screen
+          name="dashboard"
+          options={{
+            title: "Dashboard",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="home-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-drawerActiveBackgroundColor: "#ff4d1c",
-drawerActiveTintColor: "#fff",
+        <Drawer.Screen
+          name="products"
+          options={{
+            title: "Products",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="cube-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-drawerLabelStyle: {
-fontSize: 16
-},
+        <Drawer.Screen
+          name="addsale"
+          options={{
+            title: "Add Sale",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="add-circle-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-drawerStyle: {
-width: 280
-},
+        <Drawer.Screen
+          name="salesorders"
+          options={{
+            title: "Sales Orders",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="cart-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-drawerType: "front",
-swipeEnabled: true,
-overlayColor: "rgba(0,0,0,0.3)"
+        <Drawer.Screen
+          name="customers"
+          options={{
+            title: "Customers",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="people-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-})}
+        <Drawer.Screen
+          name="reports"
+          options={{
+            title: "Reports",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="stats-chart-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
->
+        <Drawer.Screen
+          name="settings"
+          options={{
+            title: "Settings",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons
+                name="settings-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-<Drawer.Screen
-name="dashboard"
-options={{
-title: "Dashboard",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="home-outline" size={size} color={color} />
-)
-}}
-/>
+        <Drawer.Screen
+          name="profile"
+          options={{
+            drawerItemStyle: {
+              display: "none",
+            },
+          }}
+        />
 
-<Drawer.Screen
-name="products"
-options={{
-title: "Products",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="cube-outline" size={size} color={color} />
-)
-}}
-/>
+        <Drawer.Screen
+          name="category"
+          options={{
+            drawerItemStyle: {
+              display: "none",
+            },
+          }}
+        />
 
-<Drawer.Screen
-name="addsale"
-options={{
-title: "Add Sale",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="add-circle-outline" size={size} color={color} />
-)
-}}
-/>
-
-<Drawer.Screen
-name="salesorders"
-options={{
-title: "Sales Orders",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="cart-outline" size={size} color={color} />
-)
-}}
-/>
-
-<Drawer.Screen
-name="customers"
-options={{
-title: "Customers",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="people-outline" size={size} color={color} />
-)
-}}
-/>
-
-<Drawer.Screen
-name="reports"
-options={{
-title: "Reports",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="stats-chart-outline" size={size} color={color} />
-)
-}}
-/>
-
-<Drawer.Screen
-name="settings"
-options={{
-title: "Settings",
-drawerIcon: ({ color, size }) => (
-<Ionicons name="settings-outline" size={size} color={color} />
-)
-}}
-/>
-
-{/* Hidden Screens */}
-
-<Drawer.Screen
-name="profile"
-options={{ drawerItemStyle: { display: "none" } }}
-/>
-
-<Drawer.Screen
-name="category"
-options={{ drawerItemStyle: { display: "none" } }}
-/>
-
-<Drawer.Screen
-name="printSettings"
-options={{ drawerItemStyle: { display: "none" } }}
-/>
-
-</Drawer>
-
-);
+        <Drawer.Screen
+          name="printSettings"
+          options={{
+            drawerItemStyle: {
+              display: "none",
+            },
+          }}
+        />
+      </Drawer>
+    </GestureHandlerRootView>
+  );
 }
 
 const styles = StyleSheet.create({
+  logoBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+  },
 
-logoBox: {
-flexDirection: "row",
-alignItems: "center",
-paddingVertical: 25,
-paddingHorizontal: 20
-},
+  logoText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
 
-logoText: {
-fontSize: 18,
-fontWeight: "bold",
-marginLeft: 10
-},
+  logout: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#ff4d1c",
+    margin: 20,
+    padding: 15,
+    borderRadius: 12,
+  },
 
-logout: {
-flexDirection: "row",
-alignItems: "center",
-justifyContent: "center",
-backgroundColor: "#ff4d1c",
-margin: 20,
-padding: 15,
-borderRadius: 12
-},
-
-logoutText: {
-color: "#fff",
-fontWeight: "600",
-marginLeft: 8
-}
-
+  logoutText: {
+    color: "#fff",
+    fontWeight: "600",
+    marginLeft: 8,
+  },
 });

@@ -11,10 +11,14 @@ import {
   View
 } from "react-native";
 
-import {
-  BluetoothEscposPrinter,
-  BluetoothManager
-} from "react-native-bluetooth-escpos-printer";
+const BluetoothManager = {
+  enableBluetooth: async () => [],
+  connect: async () => {},
+};
+
+const BluetoothEscposPrinter = {
+  printText: async () => {},
+};
 
 export default function PrintSettings() {
 
