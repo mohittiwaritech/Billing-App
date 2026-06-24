@@ -14,7 +14,9 @@ import {
 // 1. Pehle ensure karein ki ye import sahi se ho
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import { useEffect } from "react";
 import useStore from "../../../components/store/useStore";
+import dbService from "../../../components/services/dbService";
 
 function CustomDrawer(props) {
   const { businessProfile } = useStore();
@@ -60,6 +62,17 @@ function CustomDrawer(props) {
 }
 
 export default function Layout() {
+  
+  useEffect(() => {
+    // Start listening to Firestore changes when the app loads
+    dbService.startSync();
+
+    // Stop listening when the app closes or unmounts
+    return () => {
+      dbService.stopSync();
+    };
+  }, []);
+
   return (
     // 2. Pure Drawer Layout ko yahan GestureHandlerRootView se wrap karein
     <GestureHandlerRootView style={{ flex: 1 }}>

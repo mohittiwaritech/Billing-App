@@ -11,14 +11,7 @@ import {
   View
 } from "react-native";
 
-const BluetoothManager = {
-  enableBluetooth: async () => [],
-  connect: async () => {},
-};
-
-const BluetoothEscposPrinter = {
-  printText: async () => {},
-};
+import { BluetoothManager, BluetoothEscposPrinter } from '@mateusdegobi/react-native-bluetooth-escpos-printer';
 
 export default function PrintSettings() {
 
@@ -57,6 +50,10 @@ export default function PrintSettings() {
         return;
       }
 
+      if (paired && typeof paired === 'string') {
+        paired = JSON.parse(paired);
+      }
+      
       let parsedDevices = [];
       for (let i = 0; i < paired.length; i++) {
         try {

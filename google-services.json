@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "983052423781",
+    "project_id": "billing-zone-580b6",
+    "storage_bucket": "billing-zone-580b6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983052423781:android:e1dc403c23ad0d45adac8c",
+        "android_client_info": {
+          "package_name": "com.anonymous.billingzone2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983052423781-f0f7d36k9lp05rt2vfrf0lts6sehfu2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0ab1XhshnK-C2rsyCWPws-Mr5x4BA6aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983052423781-f0f7d36k9lp05rt2vfrf0lts6sehfu2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

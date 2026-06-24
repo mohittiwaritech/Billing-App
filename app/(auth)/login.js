@@ -1,11 +1,13 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import auth from '@react-native-firebase/auth';
 
 export default function Login(){
 
 const router = useRouter();
 const [phone,setPhone] = useState("");
+const [loading, setLoading] = useState(false);
 
 
 // Bluetooth Permission Function
@@ -23,15 +25,23 @@ useEffect(() => {
 }, []);
 
 
-const sendOTP = () => {
+const sendOTP = async () => {
+  if(phone.length !== 10){
+    alert("Enter valid 10-digit mobile number");
+    return;
+  }
 
-if(phone.length !== 10){
-alert("Enter valid mobile number");
-return;
-}
-
-router.push("/(auth)/otp");
-
+  setLoading(true);
+  try {
+    const confirmation = await auth().signInWithPhoneNumber('+91' + phone);
+    setLoading(false);
+    // Pass verificationId to the OTP screen
+    router.push({ pathname: "/(auth)/otp", params: { verificationId: confirmation.verificationId } });
+  } catch (error) {
+    setLoading(false);
+    console.log(error);
+    alert("Failed to send OTP. Make sure your Firebase Blaze plan and SHA1 keys are correctly set.");
+  }
 };
 
 return(
@@ -57,8 +67,12 @@ style={styles.input}
 
 </View>
 
-<TouchableOpacity style={styles.button} onPress={sendOTP}>
-<Text style={styles.buttonText}>Send OTP</Text>
+<TouchableOpacity style={styles.button} onPress={sendOTP} disabled={loading}>
+  {loading ? (
+    <ActivityIndicator color="#fff" />
+  ) : (
+    <Text style={styles.buttonText}>Send OTP</Text>
+  )}
 </TouchableOpacity>
 
 </View>
