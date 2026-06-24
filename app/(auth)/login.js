@@ -32,6 +32,14 @@ const sendOTP = async () => {
   }
 
   setLoading(true);
+  
+  // HARDCODED BYPASS FOR TESTING
+  setTimeout(() => {
+    setLoading(false);
+    router.push({ pathname: "/(auth)/otp", params: { verificationId: "dummy-id" } });
+  }, 1000);
+  
+  /* Original Code Commented Out For Testing
   try {
     const confirmation = await auth().signInWithPhoneNumber('+91' + phone);
     setLoading(false);
@@ -42,6 +50,7 @@ const sendOTP = async () => {
     console.log(error);
     alert("Failed to send OTP. Make sure your Firebase Blaze plan and SHA1 keys are correctly set.");
   }
+  */
 };
 
 return(

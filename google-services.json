@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "983052423781-hs39kgkeijmjsfr0bm52ib6ehci8a54b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anonymous.billingzone2",
+            "certificate_hash": "fd41c7ce54437dc4063e9e3f8d1a5e052dc8e512"
+          }
+        },
+        {
           "client_id": "983052423781-f0f7d36k9lp05rt2vfrf0lts6sehfu2c.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "983052423781-f0f7d36k9lp05rt2vfrf0lts6sehfu2c.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "983052423781-agtlsl68323mgddo9jdqiud8ldf5efp8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "om.anonymous.billingzone2"
+              }
             }
           ]
         }
