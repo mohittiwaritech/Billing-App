@@ -6,6 +6,7 @@
     "scheme": "billingzone",
     "android": {
       "package": "com.anonymous.billingzone2",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
@@ -15,6 +16,9 @@
         "android.permission.ACCESS_COARSE_LOCATION"
       ]
     },
+    "plugins": [
+      "@react-native-firebase/app"
+    ],
     "extra": {
       "eas": {
         "projectId": "fc6bb3e1-35d9-4bd0-890a-b5753b41224d"

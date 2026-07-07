@@ -14,7 +14,7 @@ class DatabaseService {
 
     // 1. Sync Categories
     const unsubCategories = firestore()
-      .collection('categories')
+      .collection('app_categories')
       .onSnapshot(
         (snapshot) => {
           if (snapshot) {
@@ -27,7 +27,7 @@ class DatabaseService {
 
     // 2. Sync Products
     const unsubProducts = firestore()
-      .collection('products')
+      .collection('app_products')
       .onSnapshot(
         (snapshot) => {
           if (snapshot) {
@@ -40,7 +40,7 @@ class DatabaseService {
 
     // 3. Sync Customers
     const unsubCustomers = firestore()
-      .collection('customers')
+      .collection('app_customers')
       .onSnapshot(
         (snapshot) => {
           if (snapshot) {
@@ -53,7 +53,7 @@ class DatabaseService {
 
     // 4. Sync Sales
     const unsubSales = firestore()
-      .collection('sales')
+      .collection('app_sales')
       .orderBy('timestamp', 'asc') // So we can calculate invoice numbers or show history properly
       .onSnapshot(
         (snapshot) => {
@@ -84,7 +84,7 @@ class DatabaseService {
   // Sales
   async addSale(saleData) {
     try {
-      const docRef = await firestore().collection('sales').add({
+      const docRef = await firestore().collection('app_sales').add({
         ...saleData,
         timestamp: firestore.FieldValue.serverTimestamp() // Good for sorting
       });
@@ -97,7 +97,7 @@ class DatabaseService {
 
   async deleteSale(id) {
     try {
-      await firestore().collection('sales').doc(id).delete();
+      await firestore().collection('app_sales').doc(id).delete();
     } catch (error) {
       console.error('Failed to delete sale from Firestore:', error);
       throw error;
@@ -108,10 +108,10 @@ class DatabaseService {
   async addCustomer(customerData) {
     try {
       // Check if phone already exists (we could do this locally for speed, but doing it in DB ensures consistency)
-      const exists = await firestore().collection('customers').where('phone', '==', customerData.phone).get();
+      const exists = await firestore().collection('app_customers').where('phone', '==', customerData.phone).get();
       if (!exists.empty) return null; // Already exists
       
-      const docRef = await firestore().collection('customers').add(customerData);
+      const docRef = await firestore().collection('app_customers').add(customerData);
       return docRef.id;
     } catch (error) {
       console.error('Failed to add customer to Firestore:', error);
@@ -121,7 +121,7 @@ class DatabaseService {
 
   async deleteCustomer(id) {
     try {
-      await firestore().collection('customers').doc(id).delete();
+      await firestore().collection('app_customers').doc(id).delete();
     } catch (error) {
       console.error('Failed to delete customer:', error);
       throw error;
@@ -131,10 +131,10 @@ class DatabaseService {
   // Categories
   async addCategory(name) {
     try {
-      const exists = await firestore().collection('categories').where('name', '==', name).get();
+      const exists = await firestore().collection('app_categories').where('name', '==', name).get();
       if (!exists.empty) return null;
       
-      const docRef = await firestore().collection('categories').add({ name });
+      const docRef = await firestore().collection('app_categories').add({ name });
       return docRef.id;
     } catch (error) {
       console.error('Failed to add category:', error);
@@ -144,7 +144,7 @@ class DatabaseService {
 
   async updateCategory(id, name) {
     try {
-      await firestore().collection('categories').doc(id).update({ name });
+      await firestore().collection('app_categories').doc(id).update({ name });
     } catch (error) {
       console.error('Failed to update category:', error);
       throw error;
@@ -153,7 +153,7 @@ class DatabaseService {
 
   async deleteCategory(id) {
     try {
-      await firestore().collection('categories').doc(id).delete();
+      await firestore().collection('app_categories').doc(id).delete();
     } catch (error) {
       console.error('Failed to delete category:', error);
       throw error;
@@ -163,10 +163,10 @@ class DatabaseService {
   // Products
   async addProduct(productData) {
     try {
-      const exists = await firestore().collection('products').where('name', '==', productData.name).get();
+      const exists = await firestore().collection('app_products').where('name', '==', productData.name).get();
       if (!exists.empty) return null;
 
-      const docRef = await firestore().collection('products').add(productData);
+      const docRef = await firestore().collection('app_products').add(productData);
       return docRef.id;
     } catch (error) {
       console.error('Failed to add product:', error);
@@ -176,7 +176,7 @@ class DatabaseService {
 
   async updateProduct(id, data) {
     try {
-      await firestore().collection('products').doc(id).update(data);
+      await firestore().collection('app_products').doc(id).update(data);
     } catch (error) {
       console.error('Failed to update product:', error);
       throw error;
@@ -185,7 +185,7 @@ class DatabaseService {
 
   async deleteProduct(id) {
     try {
-      await firestore().collection('products').doc(id).delete();
+      await firestore().collection('app_products').doc(id).delete();
     } catch (error) {
       console.error('Failed to delete product:', error);
       throw error;

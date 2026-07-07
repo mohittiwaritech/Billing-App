@@ -11,6 +11,7 @@ Image,
 Dimensions,
 ScrollView
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import useStore from "../../../components/store/useStore";
 
@@ -210,18 +211,22 @@ return(
 
 <View style={styles.productCard}>
 
-<Image
-source={{uri:item.image}}
-style={styles.productImage}
-/>
+{item.image && item.image.trim() !== "" ? (
+<Image source={{uri:item.image}} style={styles.productImage}/>
+) : (
+<View style={[styles.productImage, {backgroundColor:"#f1f5f9", justifyContent:"center", alignItems:"center"}]}>
+<Ionicons name="image-outline" size={24} color="#cbd5e1" />
+</View>
+)}
 
-<Text style={styles.productName}>
+<View style={styles.productInfo}>
+<Text style={styles.productName} numberOfLines={2}>
 {item.name}
 </Text>
-
 <Text style={styles.productPrice}>
 ₹{item.price}
 </Text>
+</View>
 
 
 {qty===0 ? (
@@ -309,87 +314,85 @@ Checkout
 
 {checkout && (
 
-<ScrollView style={styles.paymentScreen}>
+<ScrollView style={styles.paymentScreen} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:40}}>
 
-<TouchableOpacity
-onPress={()=>setCheckout(false)}
-style={styles.backBtn}
->
-<Text style={styles.backText}>← Back</Text>
+<View style={styles.checkoutHeader}>
+<TouchableOpacity onPress={()=>setCheckout(false)} style={styles.backBtn}>
+<Ionicons name="arrow-back" size={26} color="#1e293b"/>
 </TouchableOpacity>
+<Text style={styles.title}>Checkout</Text>
+<View style={{width:26}}/>
+</View>
 
-<Text style={styles.title}>
-Customer Information
-</Text>
+<Text style={styles.sectionTitle}>Customer Details</Text>
 
+<View style={styles.inputCard}>
+<Text style={styles.label}>Customer Name *</Text>
 <TextInput
-placeholder="Customer Name"
+placeholder="e.g. John Doe"
+placeholderTextColor="#9ca3af"
 style={styles.input}
 value={customerName}
 onChangeText={setCustomerName}
 />
 
+<Text style={styles.label}>Phone Number *</Text>
 <TextInput
-placeholder="Phone"
+placeholder="e.g. 9876543210"
+placeholderTextColor="#9ca3af"
 style={styles.input}
+keyboardType="phone-pad"
 value={phone}
 onChangeText={setPhone}
 />
 
+<Text style={styles.label}>Address</Text>
 <TextInput
-placeholder="Address"
+placeholder="e.g. 123 Main St"
+placeholderTextColor="#9ca3af"
 style={styles.input}
 value={address}
 onChangeText={setAddress}
 />
+</View>
 
-<Text style={styles.label}>
-Payment Method
-</Text>
+<Text style={styles.sectionTitle}>Payment Method</Text>
 
 <View style={styles.payRow}>
 
 <TouchableOpacity
-style={[
-styles.payBtn,
-payment==="Cash" && styles.activePay
-]}
+style={[styles.payBtn, payment==="Cash" && styles.activePay]}
 onPress={()=>setPayment("Cash")}
 >
-<Text>Cash</Text>
+<Ionicons name="cash-outline" size={24} color={payment==="Cash" ? "#fff" : "#4f46e5"} />
+<Text style={[styles.payBtnText, payment==="Cash" && {color:"#fff"}]}>Cash</Text>
 </TouchableOpacity>
 
 <TouchableOpacity
-style={[
-styles.payBtn,
-payment==="UPI" && styles.activePay
-]}
+style={[styles.payBtn, payment==="UPI" && styles.activePay]}
 onPress={()=>setPayment("UPI")}
 >
-<Text>UPI</Text>
+<Ionicons name="qr-code-outline" size={24} color={payment==="UPI" ? "#fff" : "#4f46e5"} />
+<Text style={[styles.payBtnText, payment==="UPI" && {color:"#fff"}]}>UPI</Text>
 </TouchableOpacity>
 
 </View>
 
+<View style={styles.billContainer}>
 <View style={styles.billBox}>
-
-<Text>Total Qty : {totalQty}</Text>
-
-<Text style={styles.billAmount}>
-₹{total}
-</Text>
-
+<Text style={styles.billText}>Total Items</Text>
+<Text style={styles.billValue}>{totalQty}</Text>
 </View>
 
-<TouchableOpacity
-style={styles.placeBtn}
-onPress={placeOrder}
->
+<View style={styles.billBoxTop}>
+<Text style={styles.billTotalText}>Grand Total</Text>
+<Text style={styles.billAmount}>₹{total}</Text>
+</View>
+</View>
 
-<Text style={styles.placeText}>
-Place Order
-</Text>
-
+<TouchableOpacity style={styles.placeBtn} onPress={placeOrder}>
+<Ionicons name="checkmark-circle" size={20} color="#fff" style={{marginRight:8}}/>
+<Text style={styles.placeText}>Confirm Order</Text>
 </TouchableOpacity>
 
 </ScrollView>
@@ -406,195 +409,348 @@ const styles=StyleSheet.create({
 
 container:{
 flex:1,
-backgroundColor:"#f5f7fb"
+backgroundColor:"#f8fafc"
 },
 
 search:{
 backgroundColor:"#fff",
-padding:12,
-margin:10,
-borderRadius:10,
+padding:14,
+margin:15,
+borderRadius:12,
 borderWidth:1,
-borderColor:"#ddd"
+borderColor:"#e2e8f0",
+fontSize:15
 },
 
 categoryBar:{
-padding:10,
-backgroundColor:"#fff"
+paddingHorizontal:15,
+paddingBottom:10,
+backgroundColor:"#f8fafc"
 },
 
 catBtn:{
-paddingVertical:8,
-paddingHorizontal:15,
-marginRight:10,
-backgroundColor:"#eee",
+paddingVertical:10,
+paddingHorizontal:20,
+marginRight:12,
+backgroundColor:"#e2e8f0",
 borderRadius:20
 },
 
 activeCat:{
-backgroundColor:"#4f46e5"
+backgroundColor:"#4f46e5",
+shadowColor:"#4f46e5",
+shadowOpacity:0.3,
+shadowRadius:5,
+elevation:4
 },
 
 products:{
 flex:1,
-padding:10
+paddingHorizontal:10,
+paddingBottom: 80
 },
 
 productCard:{
 flex:1,
 backgroundColor:"#fff",
-margin:6,
-borderRadius:12,
+margin:8,
+borderRadius:16,
 padding:12,
 alignItems:"center",
+shadowColor:"#000",
+shadowOpacity:0.05,
+shadowRadius:6,
 elevation:2,
-minHeight:150
+minHeight:180
 },
 
 productImage:{
-width:60,
-height:60,
-borderRadius:10,
-marginBottom:6,
-resizeMode:"contain"
+width:80,
+height:80,
+borderRadius:12,
+marginBottom:10,
+resizeMode:"cover"
+},
+
+productInfo:{
+alignItems: "center",
+flex: 1,
+justifyContent: "flex-start",
+width: "100%"
 },
 
 productName:{
-fontWeight:"bold"
+fontWeight:"bold",
+fontSize:14,
+color:"#1e293b",
+textAlign:"center"
 },
 
 productPrice:{
-color:"#4f46e5",
-marginTop:5
+color:"#10b981",
+marginTop:4,
+fontWeight:"bold",
+fontSize:16
 },
 
 addBtn:{
-backgroundColor:"#22c55e",
-paddingHorizontal:18,
-paddingVertical:6,
-borderRadius:6,
-marginTop:8
+backgroundColor:"#e0e7ff",
+paddingHorizontal:24,
+paddingVertical:8,
+borderRadius:10,
+marginTop:12,
+width: "100%",
+alignItems: "center"
 },
 
 addText:{
-color:"#fff",
-fontWeight:"bold"
+color:"#4f46e5",
+fontWeight:"bold",
+fontSize: 14
 },
 
 qtyBox:{
 flexDirection:"row",
-marginTop:10
+marginTop:12,
+alignItems: "center",
+justifyContent: "space-between",
+width: "100%",
+backgroundColor: "#f1f5f9",
+borderRadius: 10,
+padding: 4
 },
 
 qtyBtn:{
-backgroundColor:"#4f46e5",
-paddingHorizontal:12,
-borderRadius:6
+backgroundColor:"#fff",
+width:32,
+height:32,
+borderRadius:8,
+alignItems: "center",
+justifyContent: "center",
+shadowColor:"#000",
+shadowOpacity:0.05,
+shadowRadius:2,
+elevation:1
 },
 
 qtyText:{
-color:"#fff",
-fontSize:18
+color:"#4f46e5",
+fontSize:20,
+fontWeight:"bold",
+marginTop:-2
 },
 
 qtyNumber:{
 marginHorizontal:10,
-fontWeight:"bold"
+fontWeight:"bold",
+fontSize:16,
+color: "#1e293b"
 },
 
 bottomBar:{
+position: "absolute",
+bottom: 0,
+left: 0,
+right: 0,
 backgroundColor:"#fff",
-padding:15,
-borderTopWidth:1,
-borderColor:"#eee"
+paddingHorizontal:20,
+paddingVertical:15,
+flexDirection: "row",
+justifyContent: "space-between",
+alignItems: "center",
+shadowColor:"#000",
+shadowOpacity:0.1,
+shadowRadius:10,
+elevation:10,
+borderTopLeftRadius: 20,
+borderTopRightRadius: 20
 },
 
 totalPrice:{
-fontSize:20,
-fontWeight:"bold"
+fontSize:22,
+fontWeight:"bold",
+color: "#1e293b"
 },
 
 checkoutBtn:{
 backgroundColor:"#4f46e5",
-paddingVertical:16,
-borderRadius:10,
-marginTop:10,
-alignItems:"center"
+paddingVertical:14,
+paddingHorizontal:24,
+borderRadius:12,
+alignItems:"center",
+shadowColor:"#4f46e5",
+shadowOpacity:0.3,
+shadowRadius:5,
+elevation:4
 },
 
 checkoutText:{
 color:"#fff",
-fontWeight:"bold"
+fontWeight:"bold",
+fontSize:16
 },
 
 paymentScreen:{
-padding:20
+padding:20,
+backgroundColor: "#f8fafc",
+flex: 1
+},
+
+checkoutHeader: {
+flexDirection: "row",
+justifyContent: "space-between",
+alignItems: "center",
+marginBottom: 20,
+marginTop: 10
 },
 
 backBtn:{
-marginBottom:10
-},
-
-backText:{
-fontSize:16,
-color:"#4f46e5"
+padding: 5
 },
 
 title:{
 fontSize:22,
-fontWeight:"bold"
+fontWeight:"bold",
+color: "#1e293b"
+},
+
+sectionTitle: {
+fontSize: 18,
+fontWeight: "bold",
+color: "#334155",
+marginTop: 10,
+marginBottom: 12
+},
+
+inputCard: {
+backgroundColor: "#fff",
+padding: 16,
+borderRadius: 16,
+shadowColor:"#000",
+shadowOpacity:0.03,
+shadowRadius:5,
+elevation:2,
+marginBottom: 20
+},
+
+label:{
+marginTop:8,
+marginBottom:4,
+fontWeight: "600",
+color: "#64748b"
 },
 
 input:{
 borderWidth:1,
-borderColor:"#ddd",
-borderRadius:8,
+borderColor:"#e2e8f0",
+borderRadius:10,
 padding:12,
-marginTop:12
-},
-
-label:{
-marginTop:15
+marginBottom:12,
+backgroundColor: "#f8fafc",
+color: "#1e293b",
+fontSize: 15
 },
 
 payRow:{
 flexDirection:"row",
-marginTop:10
+gap: 12,
+marginBottom: 24
 },
 
 payBtn:{
 flex:1,
-padding:12,
-borderWidth:1,
-borderColor:"#ddd",
-alignItems:"center"
+padding:16,
+borderWidth:2,
+borderColor:"#e0e7ff",
+borderRadius:16,
+alignItems:"center",
+backgroundColor: "#fff"
 },
 
 activePay:{
-backgroundColor:"#ddd"
+backgroundColor:"#4f46e5",
+borderColor:"#4f46e5",
+shadowColor:"#4f46e5",
+shadowOpacity:0.3,
+shadowRadius:5,
+elevation:4
+},
+
+payBtnText: {
+marginTop: 8,
+fontWeight: "bold",
+color: "#4f46e5",
+fontSize: 16
+},
+
+billContainer: {
+backgroundColor: "#fff",
+borderRadius: 16,
+padding: 20,
+shadowColor:"#000",
+shadowOpacity:0.03,
+shadowRadius:5,
+elevation:2,
+marginBottom: 24
 },
 
 billBox:{
-marginTop:20
+flexDirection: "row",
+justifyContent: "space-between",
+alignItems: "center",
+marginBottom: 12
+},
+
+billText: {
+color: "#64748b",
+fontSize: 16
+},
+billValue: {
+color: "#1e293b",
+fontWeight: "bold",
+fontSize: 16
+},
+
+billBoxTop: {
+flexDirection: "row",
+justifyContent: "space-between",
+alignItems: "center",
+borderTopWidth: 1,
+borderColor: "#f1f5f9",
+paddingTop: 12
+},
+
+billTotalText: {
+fontSize: 18,
+fontWeight: "bold",
+color: "#1e293b"
 },
 
 billAmount:{
 fontSize:24,
-fontWeight:"bold"
+fontWeight:"bold",
+color: "#10b981"
 },
 
 placeBtn:{
-backgroundColor:"#4f46e5",
-padding:16,
-borderRadius:10,
-marginTop:20,
-alignItems:"center"
+backgroundColor:"#10b981",
+padding:18,
+borderRadius:14,
+alignItems:"center",
+flexDirection: "row",
+justifyContent: "center",
+shadowColor:"#10b981",
+shadowOpacity:0.3,
+shadowRadius:6,
+elevation:5,
+marginBottom: 20
 },
 
 placeText:{
 color:"#fff",
 fontWeight:"bold",
-fontSize:16
+fontSize:18,
+letterSpacing: 0.5
 }
 
 });

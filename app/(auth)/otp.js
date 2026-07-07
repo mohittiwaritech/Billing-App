@@ -57,12 +57,12 @@ const verifyOTP = async () => {
   setLoading(true);
   
   // HARDCODED BYPASS FOR TESTING (Any 6 digit OTP will work)
-  setTimeout(() => {
-    setLoading(false);
-    router.replace("/(drawer)/dashboard");
-  }, 1000);
+  // setTimeout(() => {
+  //   setLoading(false);
+  //   router.replace("/(drawer)/dashboard");
+  // }, 1000);
 
-  /* Original Code Commented Out
+  // Original Code
   if(!verificationId) {
     Alert.alert("Error", "Missing verification ID. Please go back and resend OTP.");
     return;
@@ -79,7 +79,7 @@ const verifyOTP = async () => {
     console.log(error);
     Alert.alert("Verification Failed", "The OTP you entered is incorrect or expired.");
   }
-  */
+
 };
 
 return(

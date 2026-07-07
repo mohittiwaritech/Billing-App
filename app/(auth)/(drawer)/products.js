@@ -8,7 +8,10 @@ TextInput,
 TouchableOpacity,
 Modal,
 Alert,
-Image
+Image,
+KeyboardAvoidingView,
+ScrollView,
+Platform
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -125,7 +128,7 @@ setCatModal(false);
 /* SEARCH */
 
 const filtered=products.filter((p)=>
-p.name.toLowerCase().includes(search.toLowerCase())
+  p?.name?.toLowerCase()?.includes(search.toLowerCase())
 );
 
 return(
@@ -190,68 +193,70 @@ style={styles.image}
 {/* ADD PRODUCT MODAL */}
 
 <Modal visible={modal} transparent animationType="fade">
-
-<View style={styles.modalBg}>
+<KeyboardAvoidingView style={styles.modalBg} behavior={Platform.OS === "ios" ? "padding" : "height"}>
 
 <View style={styles.modalBox}>
 
 <View style={styles.modalHeader}>
 
-<Text style={styles.modalTitle}>Add Product</Text>
+<Text style={styles.modalTitle}>{editId ? "Edit Product" : "Add Product"}</Text>
 
 <TouchableOpacity onPress={()=>setModal(false)}>
-<Ionicons name="close" size={24}/>
+<Ionicons name="close" size={26} color="#64748b"/>
 </TouchableOpacity>
 
 </View>
 
+<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:20}}>
 
 <View style={styles.imagePreviewBox}>
 
-{image ? (
+{image && image.trim() !== "" ? (
 <Image source={{uri:image}} style={styles.previewImage}/>
 ) : (
-<Text style={styles.previewText}>No Image</Text>
+<View style={{alignItems:"center"}}>
+<Ionicons name="image-outline" size={32} color="#9ca3af" />
+<Text style={styles.previewText}>No Image Selected</Text>
+</View>
 )}
 
 </View>
-
 
 <Text style={styles.label}>Image URL</Text>
 
 <TextInput
 style={styles.input}
-placeholder="Paste image link"
+placeholder="Paste image link here"
+placeholderTextColor="#9ca3af"
 value={image}
 onChangeText={setImage}
 />
 
-
 <TouchableOpacity style={styles.uploadBtn} onPress={pickImage}>
-<Text style={styles.uploadText}>Upload From Gallery</Text>
+<Ionicons name="images-outline" size={20} color="#4f46e5" style={{marginRight:8}}/>
+<Text style={styles.uploadText}>Select from Gallery</Text>
 </TouchableOpacity>
 
-
-<Text style={styles.label}>Product Name</Text>
+<Text style={styles.label}>Product Name *</Text>
 
 <TextInput
 style={styles.input}
-placeholder="Enter product name"
+placeholder="e.g. Printer, Mouse"
+placeholderTextColor="#9ca3af"
 value={name}
 onChangeText={setName}
 />
 
-
-<Text style={styles.label}>Price</Text>
+<Text style={styles.label}>Price (₹) *</Text>
 
 <TextInput
 style={styles.input}
-placeholder="Enter price"
+placeholder="0.00"
+placeholderTextColor="#9ca3af"
 value={price}
 onChangeText={setPrice}
 keyboardType="numeric"
 />
-
 
 <Text style={styles.label}>Category</Text>
 
@@ -260,16 +265,18 @@ keyboardType="numeric"
 <Picker
 selectedValue={category}
 onValueChange={(value)=>setCategory(value)}
-style={{height:48}}
+style={{height:54, color:"#1e293b"}}
+dropdownIconColor="#4f46e5"
 >
 
-<Picker.Item label="Select Category" value="" />
+<Picker.Item label="Select Category..." value="" color="#9ca3af" />
 
 {categories.map((item)=>(
 <Picker.Item
 key={item.id}
 label={item.name}
 value={item.name}
+color="#1e293b"
 />
 ))}
 
@@ -277,20 +284,19 @@ value={item.name}
 
 </View>
 
-
 <TouchableOpacity onPress={()=>setCatModal(true)}>
-<Text style={styles.addCategory}>+ Add Category</Text>
+<Text style={styles.addCategory}>+ Create New Category</Text>
 </TouchableOpacity>
-
 
 <TouchableOpacity style={styles.saveBtn} onPress={saveProduct}>
 <Text style={styles.saveText}>Save Product</Text>
 </TouchableOpacity>
 
-</View>
+</ScrollView>
 
 </View>
 
+</KeyboardAvoidingView>
 </Modal>
 
 
@@ -377,103 +383,126 @@ alignItems:"center"
 
 modalBg:{
 flex:1,
-backgroundColor:"rgba(0,0,0,0.45)",
+backgroundColor:"rgba(15,23,42,0.6)",
 justifyContent:"center",
 alignItems:"center"
 },
 
 modalBox:{
-width:"90%",
+width:"92%",
+maxHeight:"85%",
 backgroundColor:"#fff",
-borderRadius:14,
-padding:20
+borderRadius:16,
+padding:20,
+shadowColor:"#000",
+shadowOpacity:0.1,
+shadowRadius:10,
+elevation:10
 },
 
 modalHeader:{
 flexDirection:"row",
 justifyContent:"space-between",
 alignItems:"center",
-marginBottom:10
+marginBottom:16
 },
 
 modalTitle:{
-fontSize:20,
-fontWeight:"bold"
+fontSize:22,
+fontWeight:"bold",
+color:"#1e293b"
 },
 
 imagePreviewBox:{
-height:130,
+height:140,
 borderWidth:1,
-borderColor:"#e5e7eb",
-borderRadius:10,
+borderColor:"#e2e8f0",
+borderRadius:12,
 justifyContent:"center",
 alignItems:"center",
-marginBottom:15
+marginBottom:10,
+backgroundColor:"#f8fafc",
+borderStyle:"dashed"
 },
 
-previewImage:{width:100,height:100,borderRadius:10},
+previewImage:{width:120,height:120,borderRadius:8},
 
-previewText:{color:"#9ca3af"},
+previewText:{color:"#94a3b8", marginTop:8, fontWeight:"500"},
 
 label:{
 fontWeight:"600",
 marginBottom:6,
-marginTop:8
+marginTop:12,
+color:"#475569"
 },
 
 input:{
 borderWidth:1,
-borderColor:"#e5e7eb",
-borderRadius:8,
-height:48,
-paddingHorizontal:12,
-backgroundColor:"#fff"
+borderColor:"#cbd5e1",
+borderRadius:10,
+height:50,
+paddingHorizontal:14,
+backgroundColor:"#f8fafc",
+color:"#1e293b",
+fontSize:15
 },
 
 dropdown:{
 borderWidth:1,
-borderColor:"#e5e7eb",
-borderRadius:8,
-height:48,
+borderColor:"#cbd5e1",
+borderRadius:10,
+height:54,
 justifyContent:"center",
-backgroundColor:"#fff"
+backgroundColor:"#f8fafc"
 },
 
 uploadBtn:{
-backgroundColor:"#22c55e",
+backgroundColor:"#e0e7ff",
 padding:12,
-borderRadius:8,
+borderRadius:10,
 alignItems:"center",
-marginBottom:12
+marginBottom:10,
+marginTop:10,
+flexDirection:"row",
+justifyContent:"center"
 },
 
 uploadText:{
-color:"#fff",
-fontWeight:"bold"
+color:"#4f46e5",
+fontWeight:"bold",
+fontSize:15
 },
 
 addCategory:{
 color:"#4f46e5",
-marginTop:8
+marginTop:12,
+fontWeight:"600",
+fontSize:14,
+textAlign:"right"
 },
 
 saveBtn:{
 backgroundColor:"#4f46e5",
-padding:15,
-borderRadius:10,
-marginTop:18,
-alignItems:"center"
+padding:16,
+borderRadius:12,
+marginTop:24,
+alignItems:"center",
+shadowColor:"#4f46e5",
+shadowOpacity:0.3,
+shadowRadius:5,
+elevation:4
 },
 
 saveText:{
 color:"#fff",
 fontWeight:"bold",
-fontSize:16
+fontSize:16,
+letterSpacing:0.5
 },
 
 centerModal:{
 flex:1,
-backgroundColor:"rgba(0,0,0,0.5)",
+backgroundColor:"rgba(15,23,42,0.6)",
 justifyContent:"center",
 alignItems:"center"
 },
@@ -481,8 +510,12 @@ alignItems:"center"
 catBox:{
 width:"85%",
 backgroundColor:"#fff",
-borderRadius:12,
-padding:20
+borderRadius:16,
+padding:20,
+shadowColor:"#000",
+shadowOpacity:0.1,
+shadowRadius:10,
+elevation:10
 }
 
 });
